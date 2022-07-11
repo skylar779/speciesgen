@@ -1,0 +1,27 @@
+[package]
+edition = "2021"
+name = "speciesgen"
+version = "5.0.0"
+
+[dependencies.clap]
+features = ["derive", "env"]
+version = "3.2"
+
+[dependencies.serde]
+features = ["derive"]
+version = "1.0"
+
+[dependencies.serde_json]
+version = "1.0"
+
+[profile.release]
+opt-level = "z"
+debug = false
+rpath = false
+lto = true
+debug-assertions = false
+codegen-units = 1
+panic = "abort"
+incremental = false
+overflow-checks = false
+strip = true
