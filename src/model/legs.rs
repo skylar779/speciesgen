@@ -1,8 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
+#[derive(Serialize, Deserialize)]
 pub enum Legs {
     Legs,
     Body,
@@ -15,5 +14,12 @@ impl fmt::Display for Legs {
             Legs::Legs => write!(fmt, "Legs"),
             Legs::Body => write!(fmt, "Body"),
         }
+    }
+}
+
+impl Default for &Legs {
+    #[inline]
+    fn default() -> Self {
+        &Legs::Legs
     }
 }

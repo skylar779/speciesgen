@@ -17,10 +17,7 @@ fn map_create_dir(path: &Path, result: io::Result<()>) -> Result<(), Error> {
 
 #[inline]
 fn map_ser_json(path: &Path, result: serde_json::Result<()>) -> Result<(), Error> {
-    match result {
-        Ok(()) => Ok(()),
-        Err(error) => Err(Error::SerializeJson(path.to_path_buf(), error)),
-    }
+    result.map_err(|error| Error::SerializeJson(path.to_path_buf(), error))
 }
 
 #[inline]
@@ -89,7 +86,7 @@ where
     let reader = BufReader::new(file);
     let result = serde_json::from_reader(reader);
 
-    let value = map_de_json::<T>(path, result)?;
+    let value = map_de_json(path, result)?;
 
     Ok(value)
 }

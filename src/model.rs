@@ -11,6 +11,8 @@ pub use legs::Legs;
 pub use op::Op;
 pub use patch::{Patch, PatchBuilder};
 pub use rarity::Rarity;
+pub use subs::Subs;
+pub use subsfriendly::SubsFriendly;
 pub use tooltip::Tooltip;
 
 mod category;
@@ -22,9 +24,11 @@ mod legs;
 mod op;
 mod patch;
 mod rarity;
+mod subs;
+mod subsfriendly;
 mod tooltip;
 
-#[derive(Debug, Serialize)]
+#[derive(Serialize)]
 pub struct Metadata {
     version: String,
     author: String,
@@ -175,7 +179,7 @@ pub struct WeightstageSubBuilder {
 
 impl WeightstageSubBuilder {
     #[inline]
-    pub fn name<P>(mut self, name: P) -> Self
+    pub fn name<P>(&mut self, name: P) -> &mut Self
     where
         P: Into<String>,
     {
@@ -184,7 +188,7 @@ impl WeightstageSubBuilder {
     }
 
     #[inline]
-    pub fn friendly_name<P>(mut self, friendly_name: P) -> Self
+    pub fn friendly_name<P>(&mut self, friendly_name: P) -> &mut Self
     where
         P: Into<String>,
     {
@@ -193,7 +197,7 @@ impl WeightstageSubBuilder {
     }
 
     #[inline]
-    pub fn desc_chest<P>(mut self, desc_chest: P) -> Self
+    pub fn desc_chest<P>(&mut self, desc_chest: P) -> &mut Self
     where
         P: Into<String>,
     {
@@ -202,7 +206,7 @@ impl WeightstageSubBuilder {
     }
 
     #[inline]
-    pub fn type_chest(mut self, type_chest: Chests) -> Self {
+    pub fn type_chest(&mut self, type_chest: Chests) -> &mut Self {
         self.type_chest = type_chest;
         self
     }
@@ -231,13 +235,19 @@ impl WeightstageSubBuilder {
 #[derive(Serialize, Deserialize)]
 pub struct Weightstage {
     pub name: String,
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub friendly_name: String,
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub desc_chest: String,
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub desc_leg: String,
-    pub type_chest: Chests,
-    pub type_leg: Legs,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_chest: Option<Chests>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_leg: Option<Legs>,
     pub frames: bool,
     pub id: bool,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub subs: Vec<WeightstageSub>,
 }
 
@@ -249,8 +259,8 @@ impl Weightstage {
             friendly_name: None,
             desc_chest: None,
             desc_leg: None,
-            type_chest: Chests::Chest,
-            type_leg: Legs::Legs,
+            type_chest: None,
+            type_leg: None,
             frames: false,
             id: true,
             subs: Vec::new(),
@@ -263,8 +273,8 @@ pub struct WeightstageBuilder {
     friendly_name: Option<String>,
     desc_chest: Option<String>,
     desc_leg: Option<String>,
-    type_chest: Chests,
-    type_leg: Legs,
+    type_chest: Option<Chests>,
+    type_leg: Option<Legs>,
     frames: bool,
     id: bool,
     subs: Vec<WeightstageSub>,
@@ -309,13 +319,13 @@ impl WeightstageBuilder {
 
     #[inline]
     pub fn type_chest(mut self, type_chest: Chests) -> Self {
-        self.type_chest = type_chest;
+        self.type_chest = Some(type_chest);
         self
     }
 
     #[inline]
     pub fn type_leg(mut self, type_leg: Legs) -> Self {
-        self.type_leg = type_leg;
+        self.type_leg = Some(type_leg);
         self
     }
 
@@ -371,4 +381,19 @@ impl WeightstageBuilder {
             subs,
         })
     }
+}
+
+#[macro_export]
+macro_rules! sub {
+    ( $n:expr, $f:expr, $d:expr, $t:expr ) => {{
+        let mut weightstage_builder = WeightstageSub::builder();
+
+        weightstage_builder
+            .name($n)
+            .friendly_name($f)
+            .desc_chest($d)
+            .type_chest($t);
+
+        weightstage_builder.finish().unwrap()
+    }};
 }

@@ -4,7 +4,7 @@ use serde::Serialize;
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-#[derive(Debug, Serialize)]
+#[derive(Serialize)]
 pub struct Frame {
     aliases: HashMap<String, String>,
     #[serde(rename = "frameGrid")]
@@ -21,7 +21,6 @@ impl Frame {
     }
 }
 
-#[derive(Debug)]
 pub struct FrameBuilder {
     aliases: HashMap<String, String>,
     grid: Option<Grid>,
@@ -71,7 +70,7 @@ impl FrameBuilder {
     }
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Serialize, Clone)]
 pub struct FramesMultiple {
     body: PathBuf,
     back_sleeve: PathBuf,

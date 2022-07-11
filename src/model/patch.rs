@@ -2,7 +2,7 @@ use super::Op;
 use crate::Error;
 use serde::Serialize;
 
-#[derive(Debug, Serialize)]
+#[derive(Serialize)]
 pub struct Patch {
     op: Op,
     path: String,
@@ -25,7 +25,6 @@ impl Patch {
     }
 }
 
-#[derive(Debug)]
 pub struct PatchBuilder {
     op: Op,
     path: String,

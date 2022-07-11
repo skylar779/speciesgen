@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-#[derive(Debug, Serialize)]
+#[derive(Serialize)]
 pub struct Grid {
     size: (u32, u32),
     dimensions: (u32, u32),
@@ -18,7 +18,6 @@ impl Grid {
     }
 }
 
-#[derive(Debug)]
 pub struct GridBuilder {
     size: (u32, u32),
     dimensions: (u32, u32),

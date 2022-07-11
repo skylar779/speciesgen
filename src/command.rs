@@ -29,11 +29,6 @@ pub struct Build {
     /// Import a JSON file containing weightstages, otherwise the application will assume the default weightstages.
     #[clap(short, long, value_parser, value_name = "FILE")]
     pub config: Option<PathBuf>,
-
-    /// Import a JSON file containing color options, otherwise the application will assume the
-    /// default color options.
-    #[clap(long = "color-options", value_parser, value_name = "FILE")]
-    pub color_options: Option<PathBuf>,
 }
 
 #[derive(Args)]
@@ -41,10 +36,6 @@ pub struct Export {
     /// Export the default config.
     #[clap(long, value_parser, value_name = "FILE")]
     pub config: Option<PathBuf>,
-
-    /// Export the default color options.
-    #[clap(long = "color-options", value_parser, value_name = "FILE")]
-    pub color_options: Option<PathBuf>,
 }
 
 #[derive(Subcommand)]

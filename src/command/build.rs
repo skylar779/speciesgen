@@ -4,15 +4,8 @@ use crate::error::Error;
 use crate::fs;
 use crate::model::{Category, Frame, FramesMultiple, Grid, Item, Metadata, Patch, Weightstage};
 use std::borrow::Cow;
-use std::fs::File;
-use std::io::BufReader;
 use std::iter;
 use std::path::PathBuf;
-
-//mod consts;
-//mod error;
-//mod fs;
-//mod model;
 
 #[inline]
 pub fn build(args: Build, mut weightstages: Vec<Weightstage>) {
@@ -48,6 +41,14 @@ pub fn build(args: Build, mut weightstages: Vec<Weightstage>) {
 
     if let Some(config_file) = args.config {
         let result = fs::read_json::<PathBuf, Vec<Weightstage>>(config_file);
+
+        match result {
+            Ok(result) => weightstages = result,
+            Err(error) => {
+                println!("error: {error:?}");
+                std::process::exit(1);
+            }
+        }
     }
 
     if let Err(msg) = generate_mod(
@@ -165,7 +166,7 @@ fn generate_mod<'a>(
                 .description(&weightstage.desc_chest)
                 .short_description(format!(
                     "{base_short_description} {}",
-                    weightstage.type_chest
+                    weightstage.type_chest.as_ref().unwrap_or_default()
                 ))
                 .male_frames(male_frames.clone())
                 .female_frames(female_frames.clone());
@@ -182,7 +183,10 @@ fn generate_mod<'a>(
                 .inventory_icon("icons.png:pants")
                 .category(Category::Legwear)
                 .description(&weightstage.desc_leg)
-                .short_description(format!("{base_short_description} {}", weightstage.type_leg))
+                .short_description(format!(
+                    "{base_short_description} {}",
+                    weightstage.type_leg.as_ref().unwrap_or_default()
+                ))
                 .male_frames("pantsm.png")
                 .female_frames("pantsf.png");
 

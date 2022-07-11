@@ -2,8 +2,6 @@ use crate::command::Export;
 use crate::error::Error;
 use crate::fs;
 use crate::model::Weightstage;
-use std::borrow::Cow;
-use std::iter;
 use std::path::PathBuf;
 
 #[inline]
@@ -13,18 +11,11 @@ pub fn export(args: Export, weightstages: Vec<Weightstage>) {
             println!("error: {msg}");
         }
     }
-
-    if let Some(color_options_file) = args.color_options {
-        export_color_options();
-    }
 }
 
 #[inline]
-fn export_config(config_file: PathBuf, weightstages: Vec<Weightstage>) -> Result<(), Error> {
-    fs::write_json_pretty(config_file, &weightstages)?;
+fn export_config(path: PathBuf, weightstages: Vec<Weightstage>) -> Result<(), Error> {
+    fs::write_json_pretty(path, &weightstages)?;
 
     Ok(())
 }
-
-#[inline]
-fn export_color_options() {}

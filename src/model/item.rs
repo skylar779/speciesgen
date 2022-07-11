@@ -2,6 +2,7 @@ use super::{Category, Frames, Rarity, Tooltip};
 use crate::Error;
 use serde::Serialize;
 use std::collections::HashMap;
+// use std::vec::Vec;
 // use std::path::PathBuf;
 
 #[derive(Serialize)]
@@ -24,7 +25,7 @@ pub struct Item {
     male_frames: Frames,
     #[serde(rename = "femaleFrames")]
     female_frames: Frames,
-    #[serde(rename = "colorOptions")]
+    #[serde(rename = "colorOptions", skip_serializing_if = "Vec::is_empty")]
     color_options: Vec<HashMap<String, String>>,
 }
 
@@ -184,6 +185,7 @@ impl ItemBuilder {
         let short_description = short_description?;
         let male_frames = male_frames?;
         let female_frames = female_frames?;
+        // let color_options = (!color_options.is_empty()).then(|| color_options);
 
         Some(Item {
             item_name,
