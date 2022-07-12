@@ -1,0 +1,96 @@
+.\" Manpage for speciesgn.
+.TH "SPECIESGEN" "1" "July 2022" "speciesgen v5\&.0\&.0" "User Commands"
+.SH "NAME"
+speciesgen \- a mod generator for Starbound
+.SH "SYNOPSIS"
+speciesgen <\fISUBCOMMAND\fR>
+.SH "DESCRIPTION"
+speciesgen is a mod generator for Starbound to add support for modded species in the Big Fatties mod.
+.SH "SUBCOMMANDS"
+build
+    Generate a mod.
+
+export
+    Export various default configurations from the application.
+
+help
+    Print this message or the help of the given subcommands.
+.SH "OPTIONS"
+\-h, \-\-help
+    Print help information.
+
+\-V, \-\-version
+    Print version information.
+.SH OPTIONS (BUILD)
+\-h, \-\-help
+    Print help information.
+
+\-s, \-\-species \fINAME\fR
+    Set the name of the species.
+
+\-\-friendly\-species \fINAME\fR
+    Set the friendly name of the species.
+
+\-\-author \fINAME\fR
+    Set the name of the author in the metadata. (default: $USER)
+
+\-o, \-\-output \fIPATH\fR
+    Set the output directory. (default: <SPECIES>support)
+
+\-c, \-\-config \fIPATH\fR
+    Import a JSON file containing weightstages, otherwise the application will assume the default weightstages.
+.SH OPTIONS (EXPORT)
+\-h, \-\-help
+    Print help information.
+
+\-c, \-\-config \fIPATH\fR
+    Export the default config.
+.SH "EXAMPLES"
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Generate a mod for human in a folder called "mod":
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ speciesgen build \-\-species human \-\-friendly\-species Human \-\-output mod
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Export the default configuration in a file called "config.json":
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ speciesgen export \-\-config config.json
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.SH "BUGS"
+No known bugs.
+.SH "RESOURCES"
+Homepage: https://github.com/skylar779/speciesgen
+.SH "AUTHOR"
+skylar779
