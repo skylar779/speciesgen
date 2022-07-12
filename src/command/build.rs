@@ -209,8 +209,14 @@ fn generate_mod<'a>(
 
                 let mut chest_item_builder = Item::builder();
 
+                let weightstage_name = if weightstage.id {
+                    weightstage.name.as_str()
+                } else {
+                    ""
+                };
+
                 chest_item_builder
-                    .item_name(format!("{}{}{species}chest", weightstage.name, sub.name))
+                    .item_name(format!("{}{}{species}chest", weightstage_name, sub.name))
                     .inventory_icon("icons.png:chest")
                     .category(Category::Chestwear)
                     .description(&sub.desc_chest)
@@ -224,7 +230,7 @@ fn generate_mod<'a>(
                 let chest_item = chest_item_builder.finish()?;
 
                 let chest_file = weightstagesub_dir
-                    .join(format!("{}{}{species}.chest", weightstage.name, sub.name));
+                    .join(format!("{}{}{species}.chest", weightstage_name, sub.name));
 
                 fs::write_json_pretty(&chest_file, &chest_item)?;
             }

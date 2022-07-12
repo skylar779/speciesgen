@@ -1,7 +1,6 @@
-use serde::{Deserialize, Serialize};
-// use std::path::PathBuf;
-
 use crate::Error;
+use serde::{Deserialize, Serialize};
+
 pub use category::Category;
 pub use chests::Chests;
 pub use frame::{Frame, FrameBuilder, Frames, FramesMultiple, FramesMultipleBuilder};
@@ -12,7 +11,6 @@ pub use op::Op;
 pub use patch::{Patch, PatchBuilder};
 pub use rarity::Rarity;
 pub use subs::Subs;
-pub use subsfriendly::SubsFriendly;
 pub use tooltip::Tooltip;
 
 mod category;
@@ -25,83 +23,50 @@ mod op;
 mod patch;
 mod rarity;
 mod subs;
-mod subsfriendly;
 mod tooltip;
 
 #[derive(Serialize)]
 pub struct Metadata {
-    version: String,
-    author: String,
-    requires: Vec<String>,
-    description: String,
     name: String,
     #[serde(rename = "friendlyName")]
     friendly_name: String,
+    description: String,
+    author: String,
+    version: String,
+    #[serde(skip_serializing_if = "String::is_empty")]
+    link: String,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    requires: Vec<String>,
 }
 
 impl Metadata {
     #[inline]
     pub fn builder() -> MetadataBuilder {
         MetadataBuilder {
-            version: String::from("1.0.0_gen5.0.0"),
-            author: None,
-            requires: Vec::new(),
-            description: String::from(
-                "This mod has been generated with the Species Support Generator made by skylar779.",
-            ),
             name: None,
             friendly_name: None,
+            description: String::from(
+                "This mod has been generated via speciesgen made by skylar779.",
+            ),
+            author: None,
+            version: String::from("1.0.0_gen5.0.0"),
+            link: String::from("https://github.com/skylar779/speciesgen"),
+            requires: Vec::new(),
         }
     }
 }
 
 pub struct MetadataBuilder {
-    version: String,
-    author: Option<String>,
-    requires: Vec<String>,
-    description: String,
     name: Option<String>,
     friendly_name: Option<String>,
+    description: String,
+    author: Option<String>,
+    version: String,
+    link: String,
+    requires: Vec<String>,
 }
 
 impl MetadataBuilder {
-    #[inline]
-    pub fn version<P>(&mut self, version: P) -> &mut Self
-    where
-        P: Into<String>,
-    {
-        self.version = version.into();
-        self
-    }
-
-    #[inline]
-    pub fn author<P>(&mut self, author: P) -> &mut Self
-    where
-        P: Into<String>,
-    {
-        self.author = Some(author.into());
-        self
-    }
-
-    #[inline]
-    pub fn requires<I, S>(&mut self, requires: I) -> &mut Self
-    where
-        I: IntoIterator<Item = S>,
-        S: Into<String>,
-    {
-        self.requires.extend(requires.into_iter().map(Into::into));
-        self
-    }
-
-    #[inline]
-    pub fn description<P>(&mut self, description: P) -> &mut Self
-    where
-        P: Into<String>,
-    {
-        self.description = description.into();
-        self
-    }
-
     #[inline]
     pub fn name<P>(&mut self, name: P) -> &mut Self
     where
@@ -121,26 +86,74 @@ impl MetadataBuilder {
     }
 
     #[inline]
+    pub fn description<P>(&mut self, description: P) -> &mut Self
+    where
+        P: Into<String>,
+    {
+        self.description = description.into();
+        self
+    }
+
+    #[inline]
+    pub fn author<P>(&mut self, author: P) -> &mut Self
+    where
+        P: Into<String>,
+    {
+        self.author = Some(author.into());
+        self
+    }
+
+    #[inline]
+    pub fn version<P>(&mut self, version: P) -> &mut Self
+    where
+        P: Into<String>,
+    {
+        self.version = version.into();
+        self
+    }
+
+    #[inline]
+    pub fn link<P>(&mut self, link: P) -> &mut Self
+    where
+        P: Into<String>,
+    {
+        self.link = link.into();
+        self
+    }
+
+    #[inline]
+    pub fn requires<I, S>(&mut self, requires: I) -> &mut Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<String>,
+    {
+        self.requires.extend(requires.into_iter().map(Into::into));
+        self
+    }
+
+    #[inline]
     fn _finish(self) -> Option<Metadata> {
         let Self {
-            version,
-            author,
-            requires,
-            description,
             name,
             friendly_name,
+            description,
+            author,
+            version,
+            link,
+            requires,
         } = self;
-        let author = author?;
         let name = name?;
         let friendly_name = friendly_name?;
+        let author = author?;
 
         Some(Metadata {
-            version,
-            author,
-            requires,
-            description,
             name,
             friendly_name,
+            description,
+            author,
+            version,
+            link,
+            requires,
         })
     }
 
@@ -160,75 +173,16 @@ pub struct WeightstageSub {
 
 impl WeightstageSub {
     #[inline]
-    pub fn builder() -> WeightstageSubBuilder {
-        WeightstageSubBuilder {
-            name: None,
-            friendly_name: None,
-            desc_chest: None,
-            type_chest: Chests::Chest,
+    pub fn new<I>(r#type: Subs, desc_chest: I) -> WeightstageSub
+    where
+        I: Into<String>,
+    {
+        WeightstageSub {
+            name: r#type.as_str().to_string(),
+            friendly_name: r#type.as_friendly().to_string(),
+            desc_chest: desc_chest.into(),
+            type_chest: r#type.to_chest(),
         }
-    }
-}
-
-pub struct WeightstageSubBuilder {
-    name: Option<String>,
-    friendly_name: Option<String>,
-    desc_chest: Option<String>,
-    type_chest: Chests,
-}
-
-impl WeightstageSubBuilder {
-    #[inline]
-    pub fn name<P>(&mut self, name: P) -> &mut Self
-    where
-        P: Into<String>,
-    {
-        self.name = Some(name.into());
-        self
-    }
-
-    #[inline]
-    pub fn friendly_name<P>(&mut self, friendly_name: P) -> &mut Self
-    where
-        P: Into<String>,
-    {
-        self.friendly_name = Some(friendly_name.into());
-        self
-    }
-
-    #[inline]
-    pub fn desc_chest<P>(&mut self, desc_chest: P) -> &mut Self
-    where
-        P: Into<String>,
-    {
-        self.desc_chest = Some(desc_chest.into());
-        self
-    }
-
-    #[inline]
-    pub fn type_chest(&mut self, type_chest: Chests) -> &mut Self {
-        self.type_chest = type_chest;
-        self
-    }
-
-    #[inline]
-    pub fn finish(self) -> Option<WeightstageSub> {
-        let Self {
-            name,
-            friendly_name,
-            desc_chest,
-            type_chest,
-        } = self;
-        let name = name?;
-        let friendly_name = friendly_name?;
-        let desc_chest = desc_chest?;
-
-        Some(WeightstageSub {
-            name,
-            friendly_name,
-            desc_chest,
-            type_chest,
-        })
     }
 }
 
@@ -381,19 +335,4 @@ impl WeightstageBuilder {
             subs,
         })
     }
-}
-
-#[macro_export]
-macro_rules! sub {
-    ( $n:expr, $f:expr, $d:expr, $t:expr ) => {{
-        let mut weightstage_builder = WeightstageSub::builder();
-
-        weightstage_builder
-            .name($n)
-            .friendly_name($f)
-            .desc_chest($d)
-            .type_chest($t);
-
-        weightstage_builder.finish().unwrap()
-    }};
 }

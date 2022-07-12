@@ -1,3 +1,4 @@
+use super::Chests;
 use serde::Serialize;
 use std::fmt;
 
@@ -15,20 +16,51 @@ pub enum Subs {
     Gorged,
 }
 
+impl Subs {
+    #[inline]
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Subs::Busty => "busty",
+            Subs::Milky => "milky",
+            Subs::Hyper => "hyper",
+            Subs::Saturated => "saturated",
+            Subs::Stuffed => "stuffed",
+            Subs::Packed => "packed",
+            Subs::Glutted => "glutted",
+            Subs::Filled => "filled",
+            Subs::Gorged => "gorged",
+        }
+    }
+
+    #[inline]
+    pub fn as_friendly(&self) -> &'static str {
+        match self {
+            Subs::Busty => "Busty",
+            Subs::Milky => "XBusty",
+            Subs::Hyper => "Hyper",
+            Subs::Saturated => "Saturated",
+            Subs::Stuffed => "Stuffed",
+            Subs::Packed => "Packed",
+            Subs::Glutted => "Glutted",
+            Subs::Filled => "Filled",
+            Subs::Gorged => "Gorged",
+        }
+    }
+
+    #[inline]
+    pub fn to_chest(&self) -> Chests {
+        match self {
+            Subs::Busty | Subs::Milky => Chests::Chest,
+            Subs::Hyper => Chests::Bust,
+            _ => Chests::Belly,
+        }
+    }
+}
+
 impl fmt::Display for Subs {
     #[inline]
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Subs::Busty => write!(fmt, "busty"),
-            Subs::Milky => write!(fmt, "milky"),
-            Subs::Hyper => write!(fmt, "hyper"),
-            Subs::Saturated => write!(fmt, "saturated"),
-            Subs::Stuffed => write!(fmt, "stuffed"),
-            Subs::Packed => write!(fmt, "packed"),
-            Subs::Glutted => write!(fmt, "glutted"),
-            Subs::Filled => write!(fmt, "filled"),
-            Subs::Gorged => write!(fmt, "gorged"),
-        }
+        fmt::Display::fmt(self.as_str(), fmt)
     }
 }
 

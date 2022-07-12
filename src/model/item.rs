@@ -1,9 +1,6 @@
 use super::{Category, Frames, Rarity, Tooltip};
 use crate::Error;
 use serde::Serialize;
-use std::collections::HashMap;
-// use std::vec::Vec;
-// use std::path::PathBuf;
 
 #[derive(Serialize)]
 pub struct Item {
@@ -25,8 +22,6 @@ pub struct Item {
     male_frames: Frames,
     #[serde(rename = "femaleFrames")]
     female_frames: Frames,
-    #[serde(rename = "colorOptions", skip_serializing_if = "Vec::is_empty")]
-    color_options: Vec<HashMap<String, String>>,
 }
 
 impl Item {
@@ -44,7 +39,6 @@ impl Item {
             tooltip_kind: Tooltip::Armor,
             male_frames: None,
             female_frames: None,
-            color_options: Vec::new(),
         }
     }
 }
@@ -61,7 +55,6 @@ pub struct ItemBuilder {
     tooltip_kind: Tooltip,
     male_frames: Option<Frames>,
     female_frames: Option<Frames>,
-    color_options: Vec<HashMap<String, String>>,
 }
 
 impl ItemBuilder {
@@ -150,18 +143,6 @@ impl ItemBuilder {
     }
 
     #[inline]
-    pub fn color_options<I, S>(&mut self, options: I) -> &mut Self
-    where
-        I: IntoIterator<Item = S>,
-        S: Into<HashMap<String, String>>,
-    {
-        let iter = options.into_iter().map(Into::into);
-
-        self.color_options.extend(iter);
-        self
-    }
-
-    #[inline]
     fn _finish(self) -> Option<Item> {
         let Self {
             item_name,
@@ -175,7 +156,6 @@ impl ItemBuilder {
             tooltip_kind,
             male_frames,
             female_frames,
-            color_options,
         } = self;
 
         let item_name = item_name?;
@@ -185,7 +165,6 @@ impl ItemBuilder {
         let short_description = short_description?;
         let male_frames = male_frames?;
         let female_frames = female_frames?;
-        // let color_options = (!color_options.is_empty()).then(|| color_options);
 
         Some(Item {
             item_name,
@@ -199,7 +178,6 @@ impl ItemBuilder {
             tooltip_kind,
             male_frames,
             female_frames,
-            color_options,
         })
     }
 
