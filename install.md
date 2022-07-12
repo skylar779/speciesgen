@@ -4,7 +4,6 @@
     1. [Source Code](#clone-the-source-code)
     2. [Rust Compiler](#install-the-rust-compiler-with-rustup)
 2. [Building](#building)
-    1. [Linux / Windows](#linux--windows)
 3. [Manual Page](#manual-page)
 
 ## Prerequisites
