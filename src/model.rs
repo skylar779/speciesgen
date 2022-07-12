@@ -33,9 +33,7 @@ pub struct Metadata {
     description: String,
     author: String,
     version: String,
-    #[serde(skip_serializing_if = "String::is_empty")]
     link: String,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
     requires: Vec<String>,
 }
 
