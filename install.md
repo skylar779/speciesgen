@@ -2,7 +2,7 @@
 
 1. [Prerequisites](#prerequisites)
     1. [Source Code](#clone-the-source-code)
-    2. [Rust Compiler](#install-the-rust-compiler-with-rustup)
+    2. [Installing `rustup`](#installing-rustup)
 2. [Building](#building)
 3. [Manual Page](#manual-page)
 
@@ -17,7 +17,8 @@ git clone https://github.com/skylar779/speciesgen.git
 cd speciesgen
 ```
 
-### Install [`rustup.rs`](https://rustup.rs/)
+### Installing `rustup`
+`rustup` can be found [`here`](https://rustup.rs/).
 
 ## Building
 
@@ -37,3 +38,4 @@ Installing the manual page requires `gzip`.
 sudo mkdir -p /usr/local/share/man/man1
 gzip -c man/speciesgen.1 | sudo tee /usr/local/share/man/man1/speciesgen.1.gz > /dev/null
 ```
+
