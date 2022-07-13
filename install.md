@@ -18,7 +18,7 @@ cd speciesgen
 ```
 
 ### Installing `rustup`
-`rustup` can be found [`here`](https://rustup.rs/).
+`rustup` can be found [here](https://rustup.rs/).
 
 ## Building
 
