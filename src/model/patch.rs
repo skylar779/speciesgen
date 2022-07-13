@@ -14,7 +14,7 @@ impl Patch {
     pub fn builder() -> PatchBuilder {
         PatchBuilder {
             op: Op::Add,
-            path: String::from("/compatiblespecies/-"),
+            path: String::from("/compatibleSpecies/-"),
             value: None,
         }
     }

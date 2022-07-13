@@ -73,7 +73,9 @@ impl FrameBuilder {
 #[derive(Serialize, Clone)]
 pub struct FramesMultiple {
     body: PathBuf,
+    #[serde(rename = "backSleeve")]
     back_sleeve: PathBuf,
+    #[serde(rename = "frontSleeve")]
     front_sleeve: PathBuf,
 }
 
