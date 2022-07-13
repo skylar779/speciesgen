@@ -43,12 +43,11 @@ impl Metadata {
         MetadataBuilder {
             name: None,
             friendly_name: None,
-            description: String::from(
-                "This mod has been generated via speciesgen made by skylar779.",
-            ),
+            description: "This mod has been generated via speciesgen made by skylar779."
+                .to_string(),
             author: None,
             version: format!("1.0.0_gen{}", env!("CARGO_PKG_VERSION")),
-            link: String::from("https://github.com/skylar779/speciesgen"),
+            link: "https://github.com/skylar779/speciesgen".to_string(),
             requires: Vec::new(),
         }
     }
