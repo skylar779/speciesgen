@@ -47,7 +47,7 @@ impl Metadata {
                 "This mod has been generated via speciesgen made by skylar779.",
             ),
             author: None,
-            version: String::from("1.0.0_gen5.0.0"),
+            version: format!("1.0.0_gen{}", env!("CARGO_PKG_VERSION")),
             link: String::from("https://github.com/skylar779/speciesgen"),
             requires: Vec::new(),
         }
